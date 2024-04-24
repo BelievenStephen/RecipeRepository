@@ -15,8 +15,12 @@ export class RecipeController extends BaseController {
             const page = req.query.page ? parseInt(req.query.page as string, 10) : 1;
             const result = await this.recipeService.searchRecipes(req.query.searchTerm as string, page);
             this.sendResponse(res, 200, result);
-        } catch (error) {
-            this.sendResponse(res, 500, { error: error.message });
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                this.sendResponse(res, 500, { error: error.message });
+            } else {
+                this.sendResponse(res, 500, { error: 'An unknown error occurred' });
+            }
         }
     }
 }
