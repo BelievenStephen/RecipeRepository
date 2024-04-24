@@ -51,15 +51,17 @@ app.use(passport.session());
 app.get("/api/recipe/search", async (req: Request, res: Response) => {
     const searchTerm = req.query.searchTerm as string;
     const page = parseInt(req.query.page as string) || 1;
+    const pageSize = parseInt(req.query.pageSize as string) || 10;
 
     try {
-        const results = await RecipeAPI.searchRecipes(searchTerm, page);
+        const results = await RecipeAPI.searchRecipes(searchTerm, page, pageSize);
         res.json(results);
     } catch (error) {
         console.error(error);
         res.status(500).send({ error: 'Error fetching recipes' });
     }
 });
+
 
 app.listen(5000, () => {
     console.log("Server running on localhost:5000");
