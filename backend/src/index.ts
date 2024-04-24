@@ -7,38 +7,58 @@ import { PrismaClient } from '@prisma/client';
 import { body, validationResult } from 'express-validator';
 import jsonwebtoken from 'jsonwebtoken';
 import { Request, Response } from 'express';
+import * as RecipeAPI from "./recipe-api";
 
 const app = express();
 const recipeController = new RecipeController();
 const prisma = new PrismaClient();
 const { expressjwt: expressJwt } = require("express-jwt");
-
+const helmet = require('helmet');
 const checkJwt = expressJwt({
     secret: process.env.JWT_SECRET,
     algorithms: ['HS256'],
     requestProperty: 'auth'
 });
 
+// Security middleware
+app.use(helmet());
 
-app.use(express.json());
+// Apply rate limiter to all requests
+app.use(apiLimiter);
+
+// CORS middleware
 app.use(cors());
 
+// JSON middleware
+app.use(express.json());
+
+
 app.use(session({
-    secret: process.env.SESSION_SECRET ? process.env.SESSION_SECRET : 'default_secret',
+    secret: process.env.SESSION_SECRET || 'default_secret',
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: false } // true for production, false for local dev
+    cookie: {
+        secure: false, // true for production, false for local dev
+        httpOnly: true
+    }
+    // production secure line: secure: process.env.NODE_ENV === 'production',
 }));
 
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use(session({
-    secret: process.env.SESSION_SECRET as string,
-}));
 
-app.get("/api/recipe/search", async (req, res) => {
-    await recipeController.search(req, res);
+app.get("/api/recipe/search", async (req: Request, res: Response) => {
+    const searchTerm = req.query.searchTerm as string;
+    const page = parseInt(req.query.page as string) || 1;
+
+    try {
+        const results = await RecipeAPI.searchRecipes(searchTerm, page);
+        res.json(results);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send({ error: 'Error fetching recipes' });
+    }
 });
 
 app.listen(5000, () => {
@@ -219,3 +239,18 @@ app.get('/api/reports/favorites', checkJwt, async (req, res) => {
 app.post('/api/path', async (req: Request, res: Response) => {
 
 });
+
+const rateLimit = require('express-rate-limit');
+
+const apiLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 100,
+});
+
+app.use(session({
+    secret: 'your-secret',
+    cookie: {
+        secure: true,
+        httpOnly: true
+    }
+}));
