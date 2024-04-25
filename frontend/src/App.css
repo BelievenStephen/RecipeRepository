@@ -34,3 +34,15 @@
   border-radius: 4px;
   max-width: 500px;
 }
+
+.tabs {
+  display: flex;
+  gap: 3em;
+  cursor: pointer;
+}
+
+.recipe-card-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+}
