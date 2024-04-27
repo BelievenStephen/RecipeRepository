@@ -17,10 +17,12 @@ const LoginForm: React.FC<LoginFormProps> = ({onLogin}) => {
     };
 
     const validatePassword = (password: string) => {
-        const minLength = 8;
-        const hasNumbers = /\d/.test(password);
-        const hasLetters = /[a-zA-Z]/.test(password);
-        return password.length >= minLength && hasNumbers && hasLetters;
+        if (!password.trim()) {
+            setPasswordError('Password is required');
+            return false;
+        }
+        setPasswordError('');
+        return true;
     };
 
     const handleSubmit = (event: FormEvent) => {
@@ -35,7 +37,7 @@ const LoginForm: React.FC<LoginFormProps> = ({onLogin}) => {
         }
 
         if (!validatePassword(password)) {
-            setPasswordError('Password must be at least 8 characters long and include numbers and letters.');
+            setPasswordError('Password is required');
             isValid = false;
         } else {
             setPasswordError('');
@@ -47,7 +49,7 @@ const LoginForm: React.FC<LoginFormProps> = ({onLogin}) => {
     };
 
     return (
-        <form className="entry-form" onSubmit={handleSubmit}>
+        <form className="entry-form" onSubmit={handleSubmit}  data-testid="form">
             <h1 className="welcome-header">Welcome To Recipe Repository</h1>
             <input className="form-control"
                 type="email"

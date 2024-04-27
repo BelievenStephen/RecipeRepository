@@ -22,7 +22,7 @@ const App = () => {
 
     const handleRegister = async (email: string, password: string) => {
         try {
-            const data = await register(email, password); // error here
+            const data = await register(email, password);
             setIsAuthenticated(true);
             localStorage.setItem('token', data.token);
         } catch (error) {
