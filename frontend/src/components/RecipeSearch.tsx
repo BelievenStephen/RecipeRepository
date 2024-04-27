@@ -90,7 +90,7 @@ const RecipeSearch = () => {
 
             {selectedTab === "search" && (
                 <>
-                    <form onSubmit={(event) => handleSearchSubmit(event)}>
+                    <form className="recipe-form" onSubmit={(event) => handleSearchSubmit(event)}>
                         <input
                             type="text"
                             required
@@ -99,7 +99,7 @@ const RecipeSearch = () => {
                             onChange={(event) => setSearchTerm(event.target.value)}
                         ></input>
                         <button type="submit">
-                            <AiOutlineSearch size={25} />
+                            <AiOutlineSearch size={50} />
                         </button>
                     </form>
 

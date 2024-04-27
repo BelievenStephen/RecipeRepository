@@ -1,4 +1,5 @@
 import React, {useState, FormEvent} from 'react';
+import '../App.css'
 
 interface LoginFormProps {
     onLogin: (email: string, password: string) => void;
@@ -46,9 +47,9 @@ const LoginForm: React.FC<LoginFormProps> = ({onLogin}) => {
     };
 
     return (
-        <form onSubmit={handleSubmit}>
+        <form className="entry-form" onSubmit={handleSubmit}>
             <h1 className="welcome-header">Welcome To Recipe Repository</h1>
-            <input
+            <input className="form-control"
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -56,7 +57,7 @@ const LoginForm: React.FC<LoginFormProps> = ({onLogin}) => {
                 required
             />
             {emailError && <div style={{color: 'red'}}>{emailError}</div>}
-            <input
+            <input className="form-control"
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
@@ -64,9 +65,11 @@ const LoginForm: React.FC<LoginFormProps> = ({onLogin}) => {
                 required
             />
             {passwordError && <div style={{color: 'red'}}>{passwordError}</div>}
-            <button type="submit">Log In</button>
-            <p>
-                Don't have an account? <a href="/register">Sign up</a>
+            <button type="submit" className="button" role="button">
+                <span className="text">Log In</span>
+            </button>
+            <p className="register-login">
+                Don't have an account? <a href="/register"> Sign up</a>
             </p>
         </form>
     );

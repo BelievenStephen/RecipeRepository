@@ -1,5 +1,117 @@
-.root {
-  font-family: Helvetica, Arial, sans-serif;
+#root {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+  padding-top: 5em;
+  padding-bottom: 5em;
+  height: 100vh;
+  background-color: #bdbcba;
+}
+
+@media (min-width: 768px) {
+  body {
+    margin-left: 10em;
+    margin-right: 10em;
+  }
+}
+
+.tab-active {
+  border-bottom: 4px rgb(202, 129, 2) solid;
+  padding-bottom: 0.5em;
+}
+
+.recipe-form {
+  display: flex;
+  background-color: white;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+input {
+  padding: 0.5em;
+  font-size: 2em;
+  flex: 1;
+  border: 5em;
+  margin-bottom: 15px;
+}
+
+input:focus {
+  outline: none;
+}
+
+button {
+  background-color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.recipe-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  gap: 2em;
+}
+
+.recipe-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  background-color: white;
+  padding: 1em;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+  position: relative;
+  cursor: pointer;
+  gap: 1.5em;
+}
+
+.recipe-card h3 {
+  font-size: 1.5em;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.view-more-button {
+  font-size: 1.5em;
+  padding: 1em;
+  font-weight: bold;
+  margin: auto;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  display: block;
+}
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2em;
+}
+
+.header {
+  position: relative;
+}
+
+.header img {
+  width: 100%;
+  height: 500px;
+  object-fit: cover;
+  object-position: center 75%;
+  opacity: 65%;
+  border-radius: 1em;
+}
+
+.title {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-size: 2em;
+  text-align: center;
+  background-color: black;
+  opacity: 60%;
+  padding: 0.5em 1.5em 0.5em 1.5em;
 }
 
 .overlay {
@@ -37,7 +149,7 @@
 
 .tabs {
   display: flex;
-  gap: 3em;
+  gap: 2em;
   cursor: pointer;
 }
 
@@ -45,4 +157,107 @@
   display: flex;
   align-items: center;
   gap: 0.5em;
+}
+
+/*.form-container {*/
+/*  display: flex;*/
+/*  flex-direction: column;*/
+/*  gap: 10px;*/
+/*}*/
+
+.button {
+  margin: auto;
+  align-items: center;
+  background-image: linear-gradient(144deg,#AF40FF, #5B42F3 50%,#00DDEB);
+  border: 0;
+  border-radius: 8px;
+  box-shadow: rgba(151, 65, 252, 0.2) 0 15px 30px -5px;
+  box-sizing: border-box;
+  color: #FFFFFF;
+  display: flex;
+  font-family: Phantomsans, sans-serif;
+  font-size: 20px;
+  justify-content: center;
+  line-height: 1em;
+  max-width: 100%;
+  min-width: 140px;
+  padding: 3px;
+  text-decoration: none;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  white-space: nowrap;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+.button:active,
+.button:hover {
+  outline: 0;
+}
+
+.button span {
+  background-color: rgb(5, 6, 45);
+  padding: 16px 24px;
+  border-radius: 6px;
+  width: 100%;
+  height: 100%;
+  transition: 300ms;
+}
+
+.button:hover span {
+  background: none;
+}
+
+@media (min-width: 768px) {
+  .button-64 {
+    font-size: 24px;
+    min-width: 196px;
+  }
+}
+
+.form-container {
+  max-width: 400px;
+  margin: auto;
+}
+
+
+.input-field {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.welcome-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.inputs-wrapper {
+  display: flex;
+  flex-direction: column;
+  width: 80%;
+}
+
+
+.form-control {
+  margin: auto;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  width: 30%;
+  align-items: center;
+}
+
+
+.register-login {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  text-align: center;
+  margin: 0;
+  padding: 10px;
 }

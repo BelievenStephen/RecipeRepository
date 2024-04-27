@@ -62,9 +62,9 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onRegister }) => {
     };
 
     return (
-        <form onSubmit={handleSubmit}>
+        <form className="entry-form" onSubmit={handleSubmit}>
             <h1 className="welcome-header">Welcome To Recipe Repository</h1>
-            <input
+            <input className="form-control"
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -72,7 +72,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onRegister }) => {
                 required
             />
             {emailError && <div style={{color: 'red'}}>{emailError}</div>}
-            <input
+            <input className="form-control"
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
@@ -81,9 +81,11 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onRegister }) => {
             />
             {generalError && <div style={{color: 'red'}}>{generalError}</div>}
             {passwordError && <div style={{color: 'red'}}>{passwordError}</div>}
-            <button type="submit">Register</button>
+            <button type="submit" className="button" role="button">
+                <span className="text">Sign up</span>
+            </button>
             { /* Link to the login page if they already have an account */}
-            <p>
+            <p className="register-login">
                 Already have an account? <a href="/">Log in</a>
             </p>
         </form>

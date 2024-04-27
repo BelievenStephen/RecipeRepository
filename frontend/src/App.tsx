@@ -32,12 +32,28 @@ const App = () => {
 
     return (
         <Router>
-            <Routes>
-                <Route path="/" element={!isAuthenticated ? <LoginForm onLogin={onLogin} /> : <Navigate to="/recipes" replace />} />
-                <Route path="/register" element={!isAuthenticated ? <RegisterForm onRegister={handleRegister} /> : <Navigate to="/recipes" replace />} /> // error here
-                <Route path="/recipes" element={isAuthenticated ? <RecipeSearch /> : <Navigate to="/" replace />} />
-            </Routes>
-
+            <div className="app-container">
+                <div className="header">
+                    <img src="../public/pexels-mali-64208.jpg" alt="Hero"></img>
+                    <div className="title">Recipe Repository</div>
+                </div>
+                <div className="tabs">
+                </div>
+                {isAuthenticated ? (
+                    <Routes>
+                        <Route path="/" element={!isAuthenticated ? <LoginForm onLogin={onLogin} /> : <Navigate to="/recipes" replace />} />
+                        <Route path="/register" element={!isAuthenticated ? <RegisterForm onRegister={handleRegister} /> : <Navigate to="/recipes" replace />} />
+                        <Route path="/recipes" element={isAuthenticated ? <RecipeSearch /> : <Navigate to="/" replace />} />
+                        {/* Place other authenticated routes here */}
+                    </Routes>
+                ) : (
+                    <Routes>
+                        <Route path="/" element={<LoginForm onLogin={onLogin} />} />
+                        <Route path="/register" element={<RegisterForm onRegister={handleRegister} />} />
+                        <Route path="/recipes" element={<Navigate to="/" replace />} />
+                    </Routes>
+                )}
+            </div>
         </Router>
     );
 };
