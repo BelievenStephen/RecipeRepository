@@ -1,159 +1,45 @@
-import "./App.css";
-import {useState, FormEvent, useRef, useEffect} from 'react';
-import * as api from "./API";
-import { Recipe } from './types';
-import RecipeCard from "./components/RecipeCard.tsx";
-import RecipeModal from "./components/RecipeModal.tsx";
-import {AiOutlineSearch} from "react-icons/ai";
-
-
-type Tabs = "search" | "favorites";
+import { useState } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import LoginForm from './components/LoginForm';
+import RegisterForm from './components/RegisterForm';
+import RecipeSearch from './components/RecipeSearch';
+import { login, register } from './api/authService';
+import './App.css';
 
 const App = () => {
-    const [searchTerm, setSearchTerm] = useState<string>("");
-    const [recipes, setRecipes] = useState<Recipe[]>([]);
-    const [selectedRecipe, setSelectedRecipe] = useState<Recipe | undefined>(
-        undefined)
-    const [selectedTab, setSelectedTab] = useState<Tabs>("search");
-    const [favoriteRecipes, setFavoriteRecipes] = useState<Recipe[]>([]);
-    const pageNumber = useRef(1);
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-    useEffect(() => {
-        const fetchFavoriteRecipes = async () => {
-            try {
-                const favoriteRecipes = await api.getFavoriteRecipes();
-                setFavoriteRecipes(favoriteRecipes.results);
-            } catch (error) {
-                console.log(error);
-            }
-        };
-        fetchFavoriteRecipes();
-    }, []);
-
-    const handleSearchSubmit = async (event: FormEvent) => {
-        event.preventDefault();
+    const onLogin = async (email: string, password: string) => {
         try {
-            const { results } = await api.searchRecipes(searchTerm, 1);
-            setRecipes(results);
-            pageNumber.current = 1;
+            const data = await login(email, password);
+            setIsAuthenticated(true);
+            localStorage.setItem('token', data.token);
         } catch (error) {
-            console.error(error);
+            console.error('Login failed:', error);
+            alert('Login failed. Please check your credentials.');
         }
     };
 
-    const handleViewMoreClick = async () => {
-        const nextPage = pageNumber.current + 1;
+    const handleRegister = async (email: string, password: string) => {
         try {
-            const nextRecipes = await api.searchRecipes(searchTerm, nextPage);
-            setRecipes([...recipes, ...nextRecipes.results]);
-            pageNumber.current = nextPage;
+            const data = await register(email, password); // error here
+            setIsAuthenticated(true);
+            localStorage.setItem('token', data.token);
         } catch (error) {
-            console.log(error);
-        }
-    };
-
-    const addFavoriteRecipe = async (recipe: Recipe) => {
-        try {
-            await api.addFavoriteRecipe(recipe);
-            setFavoriteRecipes([...favoriteRecipes, recipe]);
-        } catch (error) {
-            console.log(error);
-        }
-    };
-
-    const removeFavoriteRecipe = async (recipe: Recipe) => {
-        try {
-            await api.removeFavoriteRecipe(recipe);
-            const updatedRecipes = favoriteRecipes.filter(
-                (favRecipe) => recipe.id !== favRecipe.id
-            );
-            setFavoriteRecipes(updatedRecipes);
-        } catch (error) {
-            console.log(error);
+            console.error('Registration failed:', error);
         }
     };
 
     return (
-        <div>
-            <div className="tabs">
-                <h1
-                    // className={selectedTab === "search" ? "tab-active" : ""}
-                    onClick={() => setSelectedTab("search")}
-                >
-                    Recipe Search
-                </h1>
-                <h1
-                    // className={selectedTab === "favorites" ? "tab-active" : ""}
-                    onClick={() => setSelectedTab("favorites")}
-                >
-                    Favorites
-                </h1>
-            </div>
+        <Router>
+            <Routes>
+                <Route path="/" element={!isAuthenticated ? <LoginForm onLogin={onLogin} /> : <Navigate to="/recipes" replace />} />
+                <Route path="/register" element={!isAuthenticated ? <RegisterForm onRegister={handleRegister} /> : <Navigate to="/recipes" replace />} /> // error here
+                <Route path="/recipes" element={isAuthenticated ? <RecipeSearch /> : <Navigate to="/" replace />} />
+            </Routes>
 
-            {selectedTab === "search" && (
-                <>
-                    <form onSubmit={(event) => handleSearchSubmit(event)}>
-                        <input
-                            type="text"
-                            required
-                            placeholder="Enter a search term ..."
-                            value={searchTerm}
-                            onChange={(event) => setSearchTerm(event.target.value)}
-                        ></input>
-                        <button type="submit">
-                            <AiOutlineSearch size={25} />
-                        </button>
-                    </form>
-
-                    <div className="recipe-grid">
-                        {recipes.map((recipe) => {
-                            const isFavorite = favoriteRecipes.some(
-                                (favRecipe) => recipe.id === favRecipe.id
-                            );
-
-                            return (
-                                <RecipeCard
-                                    recipe={recipe}
-                                    onClick={() => setSelectedRecipe(recipe)}
-                                    onFavoriteButtonClick={
-                                        isFavorite ? removeFavoriteRecipe : addFavoriteRecipe
-                                    }
-                                    isFavorite={isFavorite}
-                                />
-                            );
-                        })}
-                    </div>
-
-                    <button className="view-more-button" onClick={handleViewMoreClick}>
-                        View More
-                    </button>
-                </>
-            )}
-
-            {selectedTab === "favorites" && (
-                <div className="recipe-grid">
-                    {favoriteRecipes.map((recipe) => (
-                        <RecipeCard
-                            recipe={recipe}
-                            onClick={() => setSelectedRecipe(recipe)}
-                            onFavoriteButtonClick={removeFavoriteRecipe}
-                            isFavorite={true}
-                        />
-                    ))}
-                </div>
-            )}
-
-
-            {selectedRecipe ? (
-                <RecipeModal
-                    recipeId={selectedRecipe.id.toString()}
-                    onClose={() => setSelectedRecipe(undefined)}
-                />
-            ) : null}
-
-        </div>
+        </Router>
     );
 };
-
 
 export default App;

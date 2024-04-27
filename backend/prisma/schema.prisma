@@ -7,8 +7,14 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model User {
+  id           Int    @id @default(autoincrement())
+  email        String @unique @db.VarChar(255)
+  passwordhash String @db.VarChar(255)
+}
+
 model FavoriteRecipes {
-  id       Int @id @default(autoincrement())
-  recipeId Int @unique
-  @@map("FavoriteRecipes")
+  id       Int     @id @default(autoincrement())
+  recipeId Int     @unique
+  notes    String?
 }

@@ -1,3 +1,8 @@
+/**
+ * Interfaces encapsulate and enforce the structure of recipe data objects,
+ * ensuring consistent data integrity across the application.
+ */
+
 export interface Recipe {
     id: number;
     title: string;

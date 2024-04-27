@@ -69,3 +69,51 @@ export const removeFavoriteRecipe = async (recipe: Recipe) => {
         throw new Error(`HTTP error! Status: ${response.status}`);
     }
 };
+
+const API_URL = 'http://localhost:5000/api';
+
+export const getFavoriteDetails = async (recipeId: string) => {
+    try {
+        const response = await fetch(`${API_URL}/recipes/favorite/details/${recipeId}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to fetch favorite details');
+        }
+
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error('Error fetching favorite details:', error);
+        throw error;
+    }
+};
+
+export const saveNotes = async (recipeId: string, notes: string) => {
+    try {
+        const response = await fetch(`${API_URL}/recipes/favorite/notes/${recipeId}`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+            },
+            body: JSON.stringify({ notes })
+        });
+
+        if (!response.ok) {
+            const errorResponse = await response.json();
+            throw new Error(errorResponse.message || 'Failed to save notes');
+        }
+
+        return await response.json();
+    } catch (error) {
+        console.error('Error saving notes:', error);
+        throw error;
+    }
+};
+
