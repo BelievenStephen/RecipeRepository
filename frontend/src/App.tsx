@@ -34,7 +34,7 @@ const App = () => {
         <Router>
             <div className="app-container">
                 <div className="header">
-                    <img src="../public/pexels-mali-64208.jpg" alt="Hero"></img>
+                    <img src="/pexels-mali-64208.jpg" alt="Hero"/>
                     <div className="title">Recipe Repository</div>
                 </div>
                 <div className="tabs">

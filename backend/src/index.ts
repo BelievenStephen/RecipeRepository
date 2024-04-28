@@ -246,6 +246,14 @@ app.get("/api/recipes/favorite/details/:recipeId", async (req, res) => {
     }
 });
 
+const corsOptions = {
+    origin: 'https://thereciperepository-e51f4c5c6e52.herokuapp.com/',
+    optionsSuccessStatus: 200,
+};
+
+app.use(cors(corsOptions));
+
+
 export default app
 
 app.listen(5000, () => {
