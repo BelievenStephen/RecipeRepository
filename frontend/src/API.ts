@@ -96,7 +96,7 @@ export const getFavoriteDetails = async (recipeId: string) => {
 
 export const saveNotes = async (recipeId: string, notes: string) => {
     try {
-        const response = await fetch(`${API_URL}/recipes/favorite/notes/${recipeId}`, {
+        const response = await fetch(`https://thereciperepository-e51f4c5c6e52.herokuapp.com/recipes/favorite/notes/${recipeId}`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
