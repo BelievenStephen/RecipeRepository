@@ -19,9 +19,14 @@ if (!JWT_SECRET) {
     throw new Error("JWT_SECRET is not defined. Set it in your .env file.");
 }
 
-app.use(express.json());
+const corsOptions = {
+    origin: 'https://reciperepository.netlify.app',
+    optionsSuccessStatus: 200,
+};
+
 // Security Feature: CORS middleware to control cross-origin requests
-app.use(cors());
+app.use(cors(corsOptions));
+app.use(express.json());
 
 // Security Feature: Input validation and sanitization to prevent injection attacks
 app.get("/api/recipe/search", async (req: Request, res: Response) => {
@@ -244,13 +249,6 @@ app.get("/api/recipes/favorite/details/:recipeId", async (req: Request, res: Res
         return res.status(500).json({ message: "Failed to fetch favorite details" });
     }
 });
-
-const corsOptions = {
-    origin: 'https://reciperepository.netlify.app',
-    optionsSuccessStatus: 200,
-};
-
-app.use(cors(corsOptions));
 
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);
