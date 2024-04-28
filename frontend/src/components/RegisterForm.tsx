@@ -11,6 +11,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onRegister }) => {
     const [emailError, setEmailError] = useState('');
     const [passwordError, setPasswordError] = useState('');
     const [generalError, setGeneralError] = useState('');
+    const [successMessage, setSuccessMessage] = useState('');
 
     const validateEmail = (email: string) => {
         const re = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
@@ -26,6 +27,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onRegister }) => {
 
     const handleSubmit = async (event: FormEvent) => {
         event.preventDefault();
+        setSuccessMessage('');
         let isValid = true;
         setGeneralError('');
 
@@ -47,6 +49,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onRegister }) => {
             try {
                 await register(email, password);
                 onRegister(email, password);
+                setSuccessMessage('Registration successful! You can now log in.');
             } catch (error: unknown) {
                 if (error instanceof Error) {
                     if (error.message === 'User already exists') {
@@ -65,21 +68,22 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onRegister }) => {
         <form className="entry-form" onSubmit={handleSubmit}>
             <h1 className="welcome-header">Welcome To Recipe Repository</h1>
             <input className="form-control"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="Enter email"
-                required
+                   type="email"
+                   value={email}
+                   onChange={(e) => setEmail(e.target.value)}
+                   placeholder="Enter email"
+                   required
             />
             {emailError && <div style={{color: 'red'}}>{emailError}</div>}
             <input className="form-control"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="Enter password"
-                required
+                   type="password"
+                   value={password}
+                   onChange={(e) => setPassword(e.target.value)}
+                   placeholder="Enter password"
+                   required
             />
             {generalError && <div style={{color: 'red'}}>{generalError}</div>}
+            {successMessage && <div style={{ color: 'green', textAlign: 'center', marginTop: '10px' }}>{successMessage}</div>}
             {passwordError && <div style={{color: 'red'}}>{passwordError}</div>}
             <button type="submit" className="button" role="button">
                 <span className="text">Sign up</span>
