@@ -247,7 +247,7 @@ app.get("/api/recipes/favorite/details/:recipeId", async (req, res) => {
 });
 
 const corsOptions = {
-    origin: 'https://thereciperepository-e51f4c5c6e52.herokuapp.com/',
+    origin: 'https://reciperepository.netlify.app',
     optionsSuccessStatus: 200,
 };
 
