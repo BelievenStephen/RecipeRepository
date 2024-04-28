@@ -1,21 +1,20 @@
-// @ts-ignore
 import dotenv from 'dotenv';
 dotenv.config();
 
-// @ts-ignore
 import express from "express";
-// @ts-ignore
 import cors from "cors";
 import * as RecipeAPI from "./recipe-api";
 import { PrismaClient } from "@prisma/client";
 import { generateFavoritesReport } from './report-generator';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import { Request, Response } from 'express';
 
 const app = express();
 const prismaClient = new PrismaClient();
 // Initialize JWT_SECRET from environment variables for secure token generation
 const JWT_SECRET = process.env.JWT_SECRET;
+const port = process.env.PORT || 5000;
 if (!JWT_SECRET) {
     throw new Error("JWT_SECRET is not defined. Set it in your .env file.");
 }
@@ -25,7 +24,7 @@ app.use(express.json());
 app.use(cors());
 
 // Security Feature: Input validation and sanitization to prevent injection attacks
-app.get("/api/recipe/search", async (req, res) => {
+app.get("/api/recipe/search", async (req: Request, res: Response) => {
     // Validate input: Ensure a search term is provided
     let searchTerm = req.query.searchTerm as string;
 
@@ -50,13 +49,13 @@ app.get("/api/recipe/search", async (req, res) => {
 
 
 
-app.get("/api/recipes/:recipeId/summary", async (req, res) => {
+app.get("/api/recipes/:recipeId/summary", async (req: Request, res: Response) => {
     const recipeId = req.params.recipeId;
     const results = await RecipeAPI.getRecipeSummary(recipeId);
     return res.json(results);
 });
 
-app.post("/api/recipes/favorite", async (req, res) => {
+app.post("/api/recipes/favorite", async (req: Request, res: Response) => {
     const recipeId = req.body.recipeId;
 
     try {
@@ -72,7 +71,7 @@ app.post("/api/recipes/favorite", async (req, res) => {
     }
 });
 
-app.get("/api/recipes/favorite", async (req, res) => {
+app.get("/api/recipes/favorite", async (req: Request, res: Response) => {
     try {
         const recipes = await prismaClient.favoriteRecipes.findMany();
         const recipeIds = recipes.map((recipe) => recipe.recipeId.toString());
@@ -86,7 +85,7 @@ app.get("/api/recipes/favorite", async (req, res) => {
     }
 });
 
-app.delete("/api/recipes/favorite", async (req, res) => {
+app.delete("/api/recipes/favorite", async (req: Request, res: Response) => {
     const recipeId = req.body.recipeId;
 
     try {
@@ -102,7 +101,7 @@ app.delete("/api/recipes/favorite", async (req, res) => {
     }
 });
 
-app.get("/api/report/favorites", async (req, res) => {
+app.get("/api/report/favorites", async (req: Request, res: Response) => {
     try {
         // Call the generateFavoritesReport function to create the report
         const report = await generateFavoritesReport(prismaClient);
@@ -120,7 +119,7 @@ app.get("/api/report/favorites", async (req, res) => {
 
 // Security Feature: Hash passwords with bcrypt before storing them
 // This ensures passwords are not stored in plain text in the database
-app.post('/api/auth/register', async (req, res) => {
+app.post('/api/auth/register', async (req: Request, res: Response) => {
     const { email, password } = req.body;
 
     // Simple validation
@@ -164,7 +163,7 @@ app.post('/api/auth/register', async (req, res) => {
 });
 // Security Feature: Use JWT for stateless authentication
 // The token is generated upon login and must be provided in subsequent requests
-app.post('/api/auth/login', async (req, res) => {
+app.post('/api/auth/login', async (req: Request, res: Response) => {
     const { email, password } = req.body;
 
     // Simple validation
@@ -201,7 +200,7 @@ app.post('/api/auth/login', async (req, res) => {
     }
 });
 
-app.patch("/api/recipes/favorite/notes/:recipeId", async (req, res) => {
+app.patch("/api/recipes/favorite/notes/:recipeId", async (req: Request, res: Response) => {
     const { recipeId } = req.params;
     const { notes } = req.body;
 
@@ -227,7 +226,7 @@ app.patch("/api/recipes/favorite/notes/:recipeId", async (req, res) => {
 });
 
 // Fetch details of a favorite recipe including notes
-app.get("/api/recipes/favorite/details/:recipeId", async (req, res) => {
+app.get("/api/recipes/favorite/details/:recipeId", async (req: Request, res: Response) => {
     const { recipeId } = req.params;
 
     try {
@@ -253,9 +252,6 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
-
-export default app
-
-app.listen(5000, () => {
-    console.log("Server running on localhost:5000");
+app.listen(port, () => {
+    console.log(`Server running on port ${port}`);
 });

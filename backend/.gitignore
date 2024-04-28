@@ -1,3 +1,9 @@
-node_modules
-# Keep environment variables out of version control
+# Dependency directories
+node_modules/
+
+# Environment configuration
 .env
+
+# Compiled JavaScript files in the src directory
+src/**/*.js
+src/**/*.js.map

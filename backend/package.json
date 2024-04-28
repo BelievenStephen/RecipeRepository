@@ -4,8 +4,9 @@
   "description": "",
   "main": "./src/index.ts",
   "scripts": {
-    "start": "npx nodemon ./src/index.ts",
-    "test": "jest"
+    "start": "node src/index.js",
+    "build": "tsc",
+    "heroku-postbuild": "npm run build"
   },
   "author": "",
   "license": "ISC",
