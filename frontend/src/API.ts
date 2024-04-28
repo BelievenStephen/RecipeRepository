@@ -1,7 +1,7 @@
 import { Recipe } from "./types";
 
 export const searchRecipes = async (searchTerm: string, page: number) => {
-    const baseURL = new URL("http://localhost:5000/api/recipe/search");
+    const baseURL = new URL("https://thereciperepository-e51f4c5c6e52.herokuapp.com/api/recipe/search");
     baseURL.searchParams.append("searchTerm", searchTerm);
     baseURL.searchParams.append("page", page.toString());
 
@@ -15,7 +15,7 @@ export const searchRecipes = async (searchTerm: string, page: number) => {
 };
 
 export const getRecipeSummary = async (recipeId: string) => {
-    const url = new URL(`http://localhost:5000/api/recipes/${recipeId}/summary`);
+    const url = new URL(`https://thereciperepository-e51f4c5c6e52.herokuapp.com/api/recipes/${recipeId}/summary`);
     const response = await fetch(url);
 
     if (!response.ok) {
@@ -26,7 +26,7 @@ export const getRecipeSummary = async (recipeId: string) => {
 };
 
 export const getFavoriteRecipes = async () => {
-    const url = new URL("http://localhost:5000/api/recipes/favorite");
+    const url = new URL("https://thereciperepository-e51f4c5c6e52.herokuapp.com/api/recipes/favorite");
     const response = await fetch(url);
 
     if (!response.ok) {
@@ -37,7 +37,7 @@ export const getFavoriteRecipes = async () => {
 };
 
 export const addFavoriteRecipe = async (recipe: Recipe) => {
-    const url = new URL("http://localhost:5000/api/recipes/favorite");
+    const url = new URL("https://thereciperepository-e51f4c5c6e52.herokuapp.com/api/recipes/favorite");
     const body = {
         recipeId: recipe.id,
     };
@@ -54,7 +54,7 @@ export const addFavoriteRecipe = async (recipe: Recipe) => {
 };
 
 export const removeFavoriteRecipe = async (recipe: Recipe) => {
-    const url = new URL("http://localhost:5000/api/recipes/favorite");
+    const url = new URL("https://thereciperepository-e51f4c5c6e52.herokuapp.com/api/recipes/favorite");
     const body = {
         recipeId: recipe.id,
     };
@@ -70,7 +70,7 @@ export const removeFavoriteRecipe = async (recipe: Recipe) => {
     }
 };
 
-const API_URL = 'http://localhost:5000/api';
+const API_URL = 'https://thereciperepository-e51f4c5c6e52.herokuapp.com/';
 
 export const getFavoriteDetails = async (recipeId: string) => {
     try {
